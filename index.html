@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Jigsaw Puzzle Adventure</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+        canvas { display: block; }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+        }
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            font-size: 14px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        #timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 18px;
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="info">3D Jigsaw Puzzle Adventure</div>
+    <div id="controls">
+        Left-click: Rotate view<br>
+        Right-click: Move piece<br>
+        Scroll: Zoom<br>
+        R: Reset puzzle
+    </div>
+    <div id="timer">Time: 00:00</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+    <script>
+        let scene, camera, renderer, raycaster, mouse;
+        let puzzlePieces = [], completePuzzle;
+        let selectedPiece = null;
+        let isDragging = false;
+        let startTime, timerInterval;
+        const puzzleSize = { width: 4, height: 3 };
+        const pieceSize = 1;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 10;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            createEnvironment();
+            createPuzzle();
+            createLighting();
+
+            document.addEventListener('mousedown', onMouseDown);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+            document.addEventListener('wheel', onWheel);
+            document.addEventListener('keydown', onKeyDown);
+
+            startTimer();
+            animate();
+        }
+
+        function createEnvironment() {
+            const skyGeometry = new THREE.SphereGeometry(500, 32, 32);
+            const skyTexture = new THREE.TextureLoader().load('https://picsum.photos/id/683/1000/1000');
+            const skyMaterial = new THREE.MeshBasicMaterial({ map: skyTexture, side: THREE.BackSide });
+            const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+            scene.add(sky);
+        }
+
+        
+    </script>
+</body>
+</html>
